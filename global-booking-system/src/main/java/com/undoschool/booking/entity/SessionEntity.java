@@ -1,16 +1,26 @@
 package com.undoschool.booking.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
 @Entity
-@Table(name = "sessions")
-public class SessionEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Table(
+        name = "sessions",
+        indexes = {
+                @Index(
+                        name = "idx_start_time",
+                        columnList = "startTimeUtc"
+                )
+        }
+)
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+public class SessionEntity extends BaseEntity {
 
     @ManyToOne
     private Offering offering;
@@ -19,38 +29,9 @@ public class SessionEntity {
 
     private Instant endTimeUtc;
 
-    public SessionEntity() {
-    }
+    private String meetingLink;
 
-    public Long getId() {
-        return id;
-    }
+    private String sessionTitle;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Offering getOffering() {
-        return offering;
-    }
-
-    public void setOffering(Offering offering) {
-        this.offering = offering;
-    }
-
-    public Instant getStartTimeUtc() {
-        return startTimeUtc;
-    }
-
-    public void setStartTimeUtc(Instant startTimeUtc) {
-        this.startTimeUtc = startTimeUtc;
-    }
-
-    public Instant getEndTimeUtc() {
-        return endTimeUtc;
-    }
-
-    public void setEndTimeUtc(Instant endTimeUtc) {
-        this.endTimeUtc = endTimeUtc;
-    }
+    private Boolean cancelled = false;
 }
