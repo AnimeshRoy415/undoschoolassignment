@@ -1,6 +1,7 @@
 package com.undoschool.booking.repository;
 
 import com.undoschool.booking.entity.Booking;
+import com.undoschool.booking.entity.Session;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,6 +14,15 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             Long parentId,
             Long offeringId
     );
+
+    @Query("""
+    SELECT s FROM Session s
+    WHERE s.offering.id IN (
+        SELECT b.offering.id FROM Booking b WHERE b.parent.id = :parentId
+    )
+""")
+    List<Session> findBookedSessionsByParent(Long parentId);
+
 
     List<Booking> findByParentId(Long parentId);
 
@@ -36,4 +46,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findParentBookings(
             @Param("parentId") Long parentId
     );
+
+    boolean existsByOfferingId(Long offeringId);
+    
 }

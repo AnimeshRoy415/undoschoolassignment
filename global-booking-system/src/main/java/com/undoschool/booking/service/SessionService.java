@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface SessionService {
 
-    List<SessionResponseDTO> getSessionsByOffering(Long offeringId);
+    List<SessionResponseDTO> getSessionsByOffering(Long offeringId, String timeZone);
 
-    SessionResponseDTO getSessionById(Long id);
+    SessionResponseDTO getSessionById(Long id, String timeZone);
 }

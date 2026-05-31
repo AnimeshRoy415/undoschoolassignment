@@ -22,4 +22,10 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
 
     @Query("SELECT s FROM Session s JOIN FETCH s.offering WHERE s.offering.id = :offeringId")
     List<Session> findByOfferingIdWithOffering(Long offeringId);
+
+    @Query("""
+    SELECT s FROM Session s
+    WHERE s.offering.teacher.id = :teacherId
+""")
+    List<Session> findAllSessionsByTeacherId(Long teacherId);
 }

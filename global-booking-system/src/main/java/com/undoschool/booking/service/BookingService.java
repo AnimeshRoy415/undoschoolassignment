@@ -1,12 +1,18 @@
 package com.undoschool.booking.service;
 
-import com.undoschool.booking.dto.request.BookingRequest;
-import com.undoschool.booking.dto.response.BookingResponse;
+import com.undoschool.booking.dto.request.BookingRequestDTO;
+import com.undoschool.booking.dto.response.BookingResponseDTO;
+
+import java.util.List;
 
 public interface BookingService {
 
-    BookingResponse bookOffering(
+    BookingResponseDTO bookOffering(
             Long parentId,
-            BookingRequest request
+            BookingRequestDTO request
     );
+
+    List<BookingResponseDTO> getBookingsByParent(Long parentId);
+
+    List<BookingResponseDTO> getAllBookings();
 }

@@ -7,10 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface OfferingRepository
         extends JpaRepository<Offering, Long> {
 
+    @Query("SELECT o FROM Offering o JOIN FETCH o.sessions WHERE o.id = :id")
+    Optional<Offering> findByIdWithSessions(Long id);
+    
     @Query("""
            SELECT DISTINCT o
            FROM Offering o

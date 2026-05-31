@@ -4,12 +4,15 @@ package com.undoschool.booking.service.impl;
 import com.undoschool.booking.dto.request.ParentRequestDTO;
 import com.undoschool.booking.dto.response.ParentResponseDTO;
 import com.undoschool.booking.entity.Parent;
+import com.undoschool.booking.mapper.ParentMapper;
 import com.undoschool.booking.repository.ParentRepository;
 import com.undoschool.booking.service.ParentService;
+import com.undoschool.booking.util.TimezoneUtil;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,7 +26,7 @@ public class ParentServiceImpl implements ParentService {
     @Override
     public ParentResponseDTO createParent(ParentRequestDTO request) {
 
-        validateTimezone(request.getTimezone());
+        TimezoneUtil.validateTimezone(request.getTimezone());
 
         Parent parent = Parent.builder()
                 .firstName(request.getFirstName())
@@ -36,7 +39,7 @@ public class ParentServiceImpl implements ParentService {
 
         Parent saved = parentRepository.save(parent);
 
-        return mapToDTO(saved);
+        return ParentMapper.toDto(saved);
     }
 
     @Override
@@ -45,7 +48,7 @@ public class ParentServiceImpl implements ParentService {
         Parent parent = parentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Parent not found with id: " + id));
 
-        return mapToDTO(parent);
+        return ParentMapper.toDto(parent);
     }
 
     @Override
@@ -53,14 +56,14 @@ public class ParentServiceImpl implements ParentService {
 
         return parentRepository.findAll()
                 .stream()
-                .map(this::mapToDTO)
+                .map(ParentMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public ParentResponseDTO updateParent(Long id, ParentRequestDTO request) {
 
-        validateTimezone(request.getTimezone());
+        TimezoneUtil.validateTimezone(request.getTimezone());
 
         Parent parent = parentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Parent not found with id: " + id));
@@ -74,7 +77,7 @@ public class ParentServiceImpl implements ParentService {
 
         Parent updated = parentRepository.save(parent);
 
-        return mapToDTO(updated);
+        return ParentMapper.toDto(updated);
     }
 
     @Override
@@ -84,25 +87,5 @@ public class ParentServiceImpl implements ParentService {
                 .orElseThrow(() -> new EntityNotFoundException("Parent not found with id: " + id));
 
         parentRepository.delete(parent);
-    }
-
-    private ParentResponseDTO mapToDTO(Parent parent) {
-        return ParentResponseDTO.builder()
-                .id(parent.getId())
-                .firstName(parent.getFirstName())
-                .lastName(parent.getLastName())
-                .email(parent.getEmail())
-                .timezone(parent.getTimezone())
-                .country(parent.getCountry())
-                .phoneNumber(parent.getPhoneNumber())
-                .build();
-    }
-
-    private void validateTimezone(String timezone) {
-        try {
-            ZoneId.of(timezone);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid timezone: " + timezone);
-        }
     }
 }

@@ -3,8 +3,10 @@ package com.undoschool.booking.service.impl;
 import com.undoschool.booking.dto.TeacherRequestDTO;
 import com.undoschool.booking.dto.TeacherResponseDTO;
 import com.undoschool.booking.entity.Teacher;
+import com.undoschool.booking.mapper.TeacherMapper;
 import com.undoschool.booking.repository.TeacherRepository;
 import com.undoschool.booking.service.TeacherService;
+import com.undoschool.booking.util.TimezoneUtil;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,7 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public TeacherResponseDTO createTeacher(TeacherRequestDTO request) {
 
-        validateTimezone(request.getTimezone());
+        TimezoneUtil.validateTimezone(request.getTimezone());
 
         Teacher teacher = Teacher.builder()
                 .firstName(request.getFirstName())
@@ -34,7 +36,7 @@ public class TeacherServiceImpl implements TeacherService {
 
         Teacher saved = teacherRepository.save(teacher);
 
-        return mapToDTO(saved);
+        return TeacherMapper.toDto(saved);
     }
 
     @Override
@@ -43,7 +45,7 @@ public class TeacherServiceImpl implements TeacherService {
         Teacher teacher = teacherRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Teacher not found with id: " + id));
 
-        return mapToDTO(teacher);
+        return TeacherMapper.toDto(teacher);
     }
 
     @Override
@@ -51,14 +53,14 @@ public class TeacherServiceImpl implements TeacherService {
 
         return teacherRepository.findAll()
                 .stream()
-                .map(this::mapToDTO)
+                .map(TeacherMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public TeacherResponseDTO updateTeacher(Long id, TeacherRequestDTO request) {
 
-        validateTimezone(request.getTimezone());
+        TimezoneUtil.validateTimezone(request.getTimezone());
 
         Teacher teacher = teacherRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Teacher not found with id: " + id));
@@ -71,7 +73,7 @@ public class TeacherServiceImpl implements TeacherService {
 
         Teacher updated = teacherRepository.save(teacher);
 
-        return mapToDTO(updated);
+        return TeacherMapper.toDto(updated);
     }
 
     @Override
@@ -83,22 +85,4 @@ public class TeacherServiceImpl implements TeacherService {
         teacherRepository.delete(teacher);
     }
 
-    private TeacherResponseDTO mapToDTO(Teacher teacher) {
-        return TeacherResponseDTO.builder()
-                .id(teacher.getId())
-                .firstName(teacher.getFirstName())
-                .lastName(teacher.getLastName())
-                .email(teacher.getEmail())
-                .phoneNumber(teacher.getPhoneNumber())
-                .timezone(teacher.getTimezone())
-                .build();
-    }
-
-    private void validateTimezone(String timezone) {
-        try {
-            ZoneId.of(timezone);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid timezone: " + timezone);
-        }
-    }
 }

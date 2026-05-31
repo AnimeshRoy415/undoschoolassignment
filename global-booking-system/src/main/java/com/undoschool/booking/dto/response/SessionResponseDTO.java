@@ -11,6 +11,10 @@ public class SessionResponseDTO {
 
     private Long id;
     private Long offeringId;
-    private Instant startTimeUtc;
-    private Instant endTimeUtc;
+//    private Instant startTimeUtc;
+//    private Instant endTimeUtc;
+    private String startTimeLocal;
+    private String endTimeLocal;
+    private String timezone;
+
 }

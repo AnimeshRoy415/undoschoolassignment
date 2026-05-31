@@ -3,6 +3,7 @@ package com.undoschool.booking.service.impl;
 import com.undoschool.booking.dto.request.CourseRequestDTO;
 import com.undoschool.booking.dto.response.CourseResponseDTO;
 import com.undoschool.booking.entity.Course;
+import com.undoschool.booking.mapper.CourseMapper;
 import com.undoschool.booking.repository.CourseRepository;
 import com.undoschool.booking.service.CourseService;
 import jakarta.persistence.EntityNotFoundException;
@@ -27,9 +28,9 @@ public class CourseServiceImpl implements CourseService {
                 .durationInWeeks(request.getDurationInWeeks())
                 .build();
 
-        Course saved = courseRepository.save(course);
-
-        return mapToDTO(saved);
+        return CourseMapper.toDto(
+                courseRepository.save(course)
+        );
     }
 
     @Override
@@ -38,7 +39,7 @@ public class CourseServiceImpl implements CourseService {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Course not found with id: " + id));
 
-        return mapToDTO(course);
+        return CourseMapper.toDto(course);
     }
 
     @Override
@@ -46,7 +47,7 @@ public class CourseServiceImpl implements CourseService {
 
         return courseRepository.findAll()
                 .stream()
-                .map(this::mapToDTO)
+                .map(CourseMapper::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -62,7 +63,7 @@ public class CourseServiceImpl implements CourseService {
 
         Course updated = courseRepository.save(course);
 
-        return mapToDTO(updated);
+        return CourseMapper.toDto(updated);
     }
 
     @Override
@@ -73,13 +74,5 @@ public class CourseServiceImpl implements CourseService {
 
         courseRepository.delete(course);
     }
-
-    private CourseResponseDTO mapToDTO(Course course) {
-        return CourseResponseDTO.builder()
-                .courseId(course.getId())
-                .courseName(course.getCourseName())
-                .description(course.getDescription())
-                .durationInWeeks(course.getDurationInWeeks())
-                .build();
-    }
+    
 }
