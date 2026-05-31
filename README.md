@@ -341,6 +341,25 @@ GET /api/bookings/parent/{parentId}
 
 # Database Schema Overview
 
+The database schema is available under:
+
+database/schema.sql
+
+Core tables:
+- teachers
+- parents
+- courses
+- offerings
+- sessions
+- bookings
+
+Relationships:
+- Teacher → Offerings (1:N)
+- Course → Offerings (1:N)
+- Offering → Sessions (1:N)
+- Parent → Bookings (1:N)
+- Offering → Bookings (1:N)
+
 ## Teacher
 
 | Column       | Type    |
