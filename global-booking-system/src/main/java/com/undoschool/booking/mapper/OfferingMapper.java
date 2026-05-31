@@ -23,8 +23,10 @@ public class OfferingMapper {
                 .stream()
                 .map(s -> SessionResponseDTO.builder()
                         .id(s.getId())
+                        .offeringId(offering.getId())
                         .startTimeLocal(TimezoneUtil.convertUtcToLocal(s.getStartTimeUtc(), timeZone))
                         .endTimeLocal(TimezoneUtil.convertUtcToLocal(s.getEndTimeUtc(), timeZone))
+                        .timezone(timeZone)
                         .build())
                 .collect(Collectors.toList());
 
