@@ -19,5 +19,5 @@ public class ParentBookingResponse {
 
     private String bookingStatus;
 
-    private List<SessionResponse> sessions;
+    private List<SessionResponseDTO> sessions;
 }

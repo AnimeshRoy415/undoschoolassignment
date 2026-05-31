@@ -1,6 +1,7 @@
 package com.undoschool.booking.mapper;
 
-import com.undoschool.booking.dto.request.OfferingRequestDto;
+import com.undoschool.booking.dto.request.OfferingRequestDTO;
+import com.undoschool.booking.dto.request.OfferingRequestDTO;
 import com.undoschool.booking.entity.Course;
 import com.undoschool.booking.entity.Offering;
 import com.undoschool.booking.entity.Teacher;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class OfferingMapper {
 
     public Offering toEntity(
-            OfferingRequestDto dto,
+            OfferingRequestDTO dto,
             Teacher teacher,
             Course course
     ) {

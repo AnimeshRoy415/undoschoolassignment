@@ -1,65 +1,47 @@
 package com.undoschool.booking.controller;
 
-import com.undoschool.booking.dto.request.BookingRequest;
+
 import com.undoschool.booking.dto.request.ParentRequestDTO;
-import com.undoschool.booking.dto.response.BookingResponse;
-import com.undoschool.booking.dto.response.OfferingResponse;
-import com.undoschool.booking.dto.response.ParentBookingResponse;
-import com.undoschool.booking.entity.Parent;
-import com.undoschool.booking.service.BookingService;
+import com.undoschool.booking.dto.response.ParentResponseDTO;
 import com.undoschool.booking.service.ParentService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
-@RequiredArgsConstructor
+@RequestMapping("/api/parents")
 public class ParentController {
 
-    private final ParentService parentService;
-    private final BookingService bookingService;
-
+    @Autowired
+    private ParentService parentService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Parent createParent(@Valid @RequestBody ParentRequestDTO request) {
-        return parentService.createParent(request);
+    public ResponseEntity<ParentResponseDTO> createParent(@RequestBody ParentRequestDTO request) {
+        return ResponseEntity.ok(parentService.createParent(request));
     }
 
-    @GetMapping("/parents/{parentId}/offerings")
-    public List<OfferingResponse> getAvailableOfferings(
-            @PathVariable Long parentId
-    ) {
-
-        return parentService.getAvailableOfferings(
-                parentId
-        );
+    @GetMapping("/{id}")
+    public ResponseEntity<ParentResponseDTO> getParent(@PathVariable Long id) {
+        return ResponseEntity.ok(parentService.getParentById(id));
     }
 
-    @PostMapping("/parents/{parentId}/bookings")
-    @ResponseStatus(HttpStatus.CREATED)
-    public BookingResponse bookOffering(
-            @PathVariable Long parentId,
-            @Valid @RequestBody BookingRequest request
-    ) {
-
-        return bookingService.bookOffering(
-                parentId,
-                request
-        );
+    @GetMapping
+    public ResponseEntity<List<ParentResponseDTO>> getAllParents() {
+        return ResponseEntity.ok(parentService.getAllParents());
     }
 
-    @GetMapping("/parents/{parentId}/bookings")
-    public List<ParentBookingResponse> getBookings(
-            @PathVariable Long parentId
-    ) {
+    @PutMapping("/{id}")
+    public ResponseEntity<ParentResponseDTO> updateParent(
+            @PathVariable Long id,
+            @RequestBody ParentRequestDTO request) {
+        return ResponseEntity.ok(parentService.updateParent(id, request));
+    }
 
-        return parentService.getBookings(
-                parentId
-        );
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteParent(@PathVariable Long id) {
+        parentService.deleteParent(id);
+        return ResponseEntity.ok("Parent deleted successfully");
     }
 }
