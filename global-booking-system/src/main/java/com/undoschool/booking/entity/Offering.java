@@ -1,27 +1,47 @@
 package com.undoschool.booking.entity;
 
+import com.undoschool.booking.enums.OfferingStatus;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Data
+@Table(name = "offerings")
+@Getter
+@Setter
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@AllArgsConstructor
+@Builder
 public class Offering extends BaseEntity {
 
-    private String title;
+    @Column(nullable = false)
+    private String offeringName;
 
-    private Integer maxStudents;
+    private String batchType;
 
-    private Integer enrolledStudents = 0;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private OfferingStatus status;
 
-    private Boolean active = true;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course course;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "teacher_id", nullable = false)
     private Teacher teacher;
 
-    @ManyToOne
-    private Course course;
+    // snapshot timezone (IMPORTANT for consistency)
+    @Column(nullable = false)
+    private String teacherTimezone;
+
+    @OneToMany(
+            mappedBy = "offering",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @OrderBy("startTimeUtc ASC")
+    private List<Session> sessions = new ArrayList<>();
 }

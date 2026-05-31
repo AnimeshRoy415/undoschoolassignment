@@ -1,19 +1,17 @@
 package com.undoschool.booking.service;
 
-import com.undoschool.booking.dto.request.OfferingRequestDto;
-import com.undoschool.booking.entity.Offering;
+
+
+import com.undoschool.booking.dto.request.OfferingRequestDTO;
+import com.undoschool.booking.dto.response.OfferingResponseDTO;
 
 import java.util.List;
 
 public interface OfferingService {
 
-    Offering addOffering(OfferingRequestDto dto);
+    OfferingResponseDTO createOffering(OfferingRequestDTO request);
 
-    List<Offering> getAllOfferings();
+    OfferingResponseDTO getOfferingById(Long id);
 
-    Offering getOfferingById(Long id);
-
-    Offering updateOffering(Long id, OfferingRequestDto dto);
-
-    void deleteOffering(Long id);
+    List<OfferingResponseDTO> getAllOfferings();
 }

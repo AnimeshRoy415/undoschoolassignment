@@ -1,19 +1,20 @@
 package com.undoschool.booking.service;
 
-import com.undoschool.booking.dto.request.CourseRequestDto;
-import com.undoschool.booking.entity.Course;
+import com.undoschool.booking.dto.request.CourseRequestDTO;
+import com.undoschool.booking.dto.request.UpdateCourseRequest;
+import com.undoschool.booking.dto.response.CourseResponseDTO;
 
 import java.util.List;
 
 public interface CourseService {
 
-    Course addCourse(CourseRequestDto dto);
+    CourseResponseDTO createCourse(CourseRequestDTO request);
 
-    List<Course> getAllCourses();
+    CourseResponseDTO getCourseById(Long courseId);
 
-    Course getCourseById(Long id);
+    List<CourseResponseDTO> getAllCourses();
 
-    Course updateCourse(Long id, CourseRequestDto dto);
+    CourseResponseDTO updateCourse(Long courseId, UpdateCourseRequest request);
 
-    void deleteCourse(Long id);
+    void deleteCourse(Long courseId);
 }

@@ -1,30 +1,35 @@
 package com.undoschool.booking.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.Instant;
+
 @MappedSuperclass
-@Data
+@Getter
+@Setter
 public abstract class BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(updatable = false)
+    @Column(nullable = false, updatable = false)
     private Instant createdAt;
 
+    @Column(nullable = false)
     private Instant updatedAt;
 
     @PrePersist
-    public void onCreate() {
-        this.createdAt = Instant.now();
-        this.updatedAt = Instant.now();
+    protected void onCreate() {
+        Instant now = Instant.now();
+        this.createdAt = now;
+        this.updatedAt = now;
     }
 
     @PreUpdate
-    public void onUpdate() {
+    protected void onUpdate() {
         this.updatedAt = Instant.now();
     }
 }

@@ -1,27 +1,37 @@
 package com.undoschool.booking.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.time.ZoneId;
 
 @Entity
 @Table(name = "parents")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@AllArgsConstructor
+@Builder
 public class Parent extends BaseEntity {
 
     private String firstName;
 
     private String lastName;
 
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = false)
     private String timezone;
 
     private String country;
 
+    @Column(unique = true)
     private String phoneNumber;
+
+    @PrePersist
+    @PreUpdate
+    public void validateTimezone() {
+        ZoneId.of(timezone);
+    }
 }

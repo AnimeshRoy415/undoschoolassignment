@@ -18,11 +18,6 @@ public class OfferingMapper {
 
         Offering offering = new Offering();
 
-        offering.setTitle(dto.getTitle());
-        offering.setMaxStudents(dto.getMaxStudents());
-        offering.setEnrolledStudents(0);
-        offering.setActive(true);
-
         offering.setTeacher(teacher);
         offering.setCourse(course);
 

@@ -1,75 +1,46 @@
 package com.undoschool.booking.controller;
 
-import com.undoschool.booking.dto.ApiResponse;
-import com.undoschool.booking.dto.request.CourseRequestDto;
-import com.undoschool.booking.service.Impl.CourseServiceImpl;
+import com.undoschool.booking.dto.request.CourseRequestDTO;
+import com.undoschool.booking.dto.response.CourseResponseDTO;
+import com.undoschool.booking.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/courses")
+@RequestMapping("/api/courses")
 public class CourseController {
 
     @Autowired
-    private CourseServiceImpl courseServiceImpl;
+    private CourseService courseService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<?>> addCourse(@RequestBody CourseRequestDto dto) {
-        return ResponseEntity.ok(
-                new ApiResponse<>(true, "Course created", courseServiceImpl.addCourse(dto))
-        );
-    }
-
-    @GetMapping
-    public ResponseEntity<ApiResponse<?>> getAllCourses() {
-
-        return ResponseEntity.ok(
-                new ApiResponse<>(
-                        true,
-                        "Courses fetched successfully",
-                        courseServiceImpl.getAllCourses()
-                )
-        );
+    public ResponseEntity<CourseResponseDTO> createCourse(@RequestBody CourseRequestDTO request) {
+        return ResponseEntity.ok(courseService.createCourse(request));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<?>> getCourseById(@PathVariable Long id) {
+    public ResponseEntity<CourseResponseDTO> getCourseById(@PathVariable Long id) {
+        return ResponseEntity.ok(courseService.getCourseById(id));
+    }
 
-        return ResponseEntity.ok(
-                new ApiResponse<>(
-                        true,
-                        "Course fetched successfully",
-                        courseServiceImpl.getCourseById(id)
-                )
-        );
+    @GetMapping
+    public ResponseEntity<List<CourseResponseDTO>> getAllCourses() {
+        return ResponseEntity.ok(courseService.getAllCourses());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<?>> updateCourse(
+    public ResponseEntity<CourseResponseDTO> updateCourse(
             @PathVariable Long id,
-            @RequestBody CourseRequestDto courseRequestDto) {
-
-        return ResponseEntity.ok(
-                new ApiResponse<>(
-                        true,
-                        "Course updated successfully",
-                        courseServiceImpl.updateCourse(id, courseRequestDto)
-                )
-        );
+            @RequestBody CourseRequestDTO request) {
+        return ResponseEntity.ok(courseService.updateCourse(id, request));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<?>> deleteCourse(@PathVariable Long id) {
-
-        courseServiceImpl.deleteCourse(id);
-
-        return ResponseEntity.ok(
-                new ApiResponse<>(
-                        true,
-                        "Course deleted successfully",
-                        null
-                )
-        );
+    public ResponseEntity<String> deleteCourse(@PathVariable Long id) {
+        courseService.deleteCourse(id);
+        return ResponseEntity.ok("Course deleted successfully");
     }
 }

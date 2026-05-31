@@ -1,27 +1,37 @@
 package com.undoschool.booking.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.ZoneId;
 
 @Entity
-@Data
+@Table(name = "teachers")
+@Getter
+@Setter
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@AllArgsConstructor
+@Builder
 public class Teacher extends BaseEntity {
 
+    @Column(nullable = false)
     private String firstName;
 
+    @Column(nullable = false)
     private String lastName;
 
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
 
-    private String timezone;
+    @Column(unique = true)
+    private String phoneNumber;
 
-    private String country;
+    @Column(nullable = false)
+    private String timezone; // IANA timezone (Asia/Kolkata)
 
-    private String expertise;
+    @PrePersist
+    @PreUpdate
+    public void validateTimezone() {
+        ZoneId.of(timezone); // ensures valid timezone
+    }
 }

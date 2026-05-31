@@ -1,18 +1,19 @@
 package com.undoschool.booking.service;
 
-import com.undoschool.booking.dto.request.TeacherRequestDto;
-import com.undoschool.booking.entity.Teacher;
+import com.undoschool.booking.dto.TeacherRequestDTO;
+import com.undoschool.booking.dto.TeacherResponseDTO;
 
 import java.util.List;
 
 public interface TeacherService {
-    Teacher addTeacher(TeacherRequestDto dto);
 
-    List<Teacher> getAllTeachers();
+    TeacherResponseDTO createTeacher(TeacherRequestDTO request);
 
-    Teacher getTeacherById(Long id);
+    TeacherResponseDTO getTeacherById(Long id);
 
-    Teacher updateTeacher(Long id, TeacherRequestDto dto);
+    List<TeacherResponseDTO> getAllTeachers();
+
+    TeacherResponseDTO updateTeacher(Long id, TeacherRequestDTO request);
 
     void deleteTeacher(Long id);
 }

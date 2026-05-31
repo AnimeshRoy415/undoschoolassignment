@@ -1,19 +1,20 @@
 package com.undoschool.booking.service;
 
-import com.undoschool.booking.entity.Parent;
+import com.undoschool.booking.dto.request.ParentRequestDTO;
+import com.undoschool.booking.dto.response.ParentResponseDTO;
+
 
 import java.util.List;
 
 public interface ParentService {
 
+    ParentResponseDTO createParent(ParentRequestDTO request);
 
-    Parent saveParent(Parent parent);
+    ParentResponseDTO getParentById(Long id);
 
-    List<Parent> getAllParents();
+    List<ParentResponseDTO> getAllParents();
 
-    Parent getParentById(Long id);
-
-    Parent updateParent(Long id, Parent parent);
+    ParentResponseDTO updateParent(Long id, ParentRequestDTO request);
 
     void deleteParent(Long id);
 }

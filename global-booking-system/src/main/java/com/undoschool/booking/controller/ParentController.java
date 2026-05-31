@@ -1,44 +1,65 @@
 package com.undoschool.booking.controller;
 
+import com.undoschool.booking.dto.request.BookingRequest;
+import com.undoschool.booking.dto.request.ParentRequestDTO;
+import com.undoschool.booking.dto.response.BookingResponse;
+import com.undoschool.booking.dto.response.OfferingResponse;
+import com.undoschool.booking.dto.response.ParentBookingResponse;
 import com.undoschool.booking.entity.Parent;
-import com.undoschool.booking.service.Impl.ParentServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.undoschool.booking.service.BookingService;
+import com.undoschool.booking.service.ParentService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/parents")
-@CrossOrigin("*")
+@RequestMapping("/api/v1")
+@RequiredArgsConstructor
 public class ParentController {
 
-    @Autowired
-    private ParentServiceImpl parentServiceImpl;
+    private final ParentService parentService;
+    private final BookingService bookingService;
+
 
     @PostMapping
-    public Parent addParent(@RequestBody Parent parent) {
-        return parentServiceImpl.saveParent(parent);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Parent createParent(@Valid @RequestBody ParentRequestDTO request) {
+        return parentService.createParent(request);
     }
 
-    @GetMapping
-    public List<Parent> getAllParents() {
-        return parentServiceImpl.getAllParents();
+    @GetMapping("/parents/{parentId}/offerings")
+    public List<OfferingResponse> getAvailableOfferings(
+            @PathVariable Long parentId
+    ) {
+
+        return parentService.getAvailableOfferings(
+                parentId
+        );
     }
 
-    @GetMapping("/{id}")
-    public Parent getParentById(@PathVariable Long id) {
-        return parentServiceImpl.getParentById(id);
+    @PostMapping("/parents/{parentId}/bookings")
+    @ResponseStatus(HttpStatus.CREATED)
+    public BookingResponse bookOffering(
+            @PathVariable Long parentId,
+            @Valid @RequestBody BookingRequest request
+    ) {
+
+        return bookingService.bookOffering(
+                parentId,
+                request
+        );
     }
 
-    @PutMapping("/{id}")
-    public Parent updateParent(@PathVariable Long id,
-                               @RequestBody Parent parent) {
-        return parentServiceImpl.updateParent(id, parent);
-    }
+    @GetMapping("/parents/{parentId}/bookings")
+    public List<ParentBookingResponse> getBookings(
+            @PathVariable Long parentId
+    ) {
 
-    @DeleteMapping("/{id}")
-    public String deleteParent(@PathVariable Long id) {
-        parentServiceImpl.deleteParent(id);
-        return "Parent deleted successfully";
+        return parentService.getBookings(
+                parentId
+        );
     }
 }

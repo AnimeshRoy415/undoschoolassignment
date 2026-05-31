@@ -1,27 +1,22 @@
 package com.undoschool.booking.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Data
+@Table(name = "courses")
+@Getter
+@Setter
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@AllArgsConstructor
+@Builder
 public class Course extends BaseEntity {
 
-    private String title;
+    @Column(nullable = false)
+    private String courseName;
 
-    @Column(length = 1000)
+    @Column(length = 2000)
     private String description;
 
-    private String category;
-
-    private Integer durationWeeks;
-
-    private Double price;
-
-    @Enumerated(EnumType.STRING)
-    private CourseLevel level;
+    private Integer durationInWeeks;
 }
