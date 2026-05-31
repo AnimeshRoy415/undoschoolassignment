@@ -31,7 +31,7 @@ A teacher can create offerings consisting of multiple sessions. Sessions are sto
 
 ## Database
 
-* MySQL
+* MySQL(8.0)
 
 ## Build Tool
 
